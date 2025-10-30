@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block title %}CFS Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="dashboard-header mb-4">
+        <h1>CFS Dashboard</h1>
+        <p>Welcome {{ user.username }} ({{ user.company_name }})</p>
+    </div>
+
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Container Stuffing</h5>
+                    <p class="card-text">Manage container stuffing operations</p>
+                    <a href="#" class="btn btn-primary">View Operations</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Cargo Tracking</h5>
+                    <p class="card-text">Track cargo status and location</p>
+                    <a href="#" class="btn btn-primary">Track Cargo</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Documentation</h5>
+                    <p class="card-text">Manage shipping documents</p>
+                    <a href="#" class="btn btn-primary">View Documents</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Cargo Management</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Cargo Number</th>
+                                    <th>Owner</th>
+                                    <th>Arrival Date</th>
+                                    <th>Pickup Date</th>
+                                    <th>Port Status</th>
+                                    <th>CFS Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cargo in cargo_list %}
+                                <tr>
+                                    <td>{{ cargo.cargo_number }}</td>
+                                    <td>{{ cargo.cargo_owner }}</td>
+                                    <td>{{ cargo.arrival_date }}</td>
+                                    <td>{{ cargo.pickup_date }}</td>
+                                    <td>
+                                        {% if cargo.arrived_at_storage %}
+                                        <span class="badge bg-success">Arrived at Storage</span>
+                                        {% else %}
+                                        <span class="badge bg-warning">In Transit</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <form method="POST" action="{% url 'cargo_toggle_status' cargo.pk 'cfs_received' %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm {% if cargo.cfs_received %}btn-success{% else %}btn-warning{% endif %}">
+                                                    {% if cargo.cfs_received %}
+                                                    <i class="fas fa-check"></i> Received
+                                                    {% else %}
+                                                    <i class="fas fa-clock"></i> Not Received
+                                                    {% endif %}
+                                                </button>
+                                            </form>
+                                            <form method="POST" action="{% url 'cargo_toggle_status' cargo.pk 'cfs_picked_up' %}" class="d-inline ms-2">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm {% if cargo.cfs_picked_up %}btn-success{% else %}btn-warning{% endif %}">
+                                                    {% if cargo.cfs_picked_up %}
+                                                    <i class="fas fa-check"></i> Picked Up
+                                                    {% else %}
+                                                    <i class="fas fa-clock"></i> Not Picked Up
+                                                    {% endif %}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No cargo records found for your CFS.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Depot Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Depot Dashboard</h1>
+        <p>Welcome {{ user.username }} ({{ user.company_name }})</p>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Container Inventory</h5>
+                    <p class="card-text">Manage container inventory</p>
+                    <a href="#" class="btn btn-primary">View Inventory</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Maintenance</h5>
+                    <p class="card-text">Container maintenance records</p>
+                    <a href="#" class="btn btn-primary">View Records</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Storage</h5>
+                    <p class="card-text">Manage storage locations</p>
+                    <a href="#" class="btn btn-primary">View Storage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

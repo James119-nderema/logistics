@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}Port Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Port Dashboard</h1>
+        <p>Welcome {{ user.username }} ({{ user.company_name }})</p>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Vessel Schedule</h5>
+                    <p class="card-text">Manage vessel arrivals and departures</p>
+                    <a href="#" class="btn btn-primary">View Schedule</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Container Status</h5>
+                    <p class="card-text">Track container movements</p>
+                    <a href="#" class="btn btn-primary">View Status</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Reports</h5>
+                    <p class="card-text">Generate port operation reports</p>
+                    <a href="#" class="btn btn-primary">View Reports</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Recent Cargo</h5>
+                    <a href="{% url 'cargo_list' %}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-box"></i> Manage Cargo
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Cargo Number</th>
+                                    <th>Owner</th>
+                                    <th>Storage</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cargo in cargo_list|slice:":5" %}
+                                <tr>
+                                    <td>{{ cargo.cargo_number }}</td>
+                                    <td>{{ cargo.cargo_owner }}</td>
+                                    <td>{{ cargo.storage }}</td>
+                                    <td>
+                                        {% if cargo.is_picked_up %}
+                                        <span class="badge bg-success">Picked Up</span>
+                                        {% elif cargo.arrived_at_storage %}
+                                        <span class="badge bg-info">At Storage</span>
+                                        {% else %}
+                                        <span class="badge bg-warning">Pending</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'cargo_update' cargo.pk %}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No cargo records found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

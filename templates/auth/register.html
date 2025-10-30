@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h2 class="text-center mb-4">Register as {{ user_type|default:"User" }}</h2>
+    
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+        
+        <div class="form-group">
+            <label for="email">Email:</label>
+            {% if form.email.errors %}
+            <div class="alert alert-danger">
+                {{ form.email.errors }}
+            </div>
+            {% endif %}
+            <input type="email" name="email" class="form-control" id="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="username">Username:</label>
+            {% if form.username.errors %}
+            <div class="alert alert-danger">
+                {{ form.username.errors }}
+            </div>
+            {% endif %}
+            <input type="text" name="username" class="form-control" id="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password1">Password:</label>
+            {% if form.password1.errors %}
+            <div class="alert alert-danger">
+                {{ form.password1.errors }}
+            </div>
+            {% endif %}
+            <input type="password" name="password1" class="form-control" id="password1" required>
+            <small class="form-text text-muted">Your password must be 8+ characters long and contain letters and numbers.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="password2">Confirm Password:</label>
+            {% if form.password2.errors %}
+            <div class="alert alert-danger">
+                {{ form.password2.errors }}
+            </div>
+            {% endif %}
+            <input type="password" name="password2" class="form-control" id="password2" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number:</label>
+            {% if form.phone.errors %}
+            <div class="alert alert-danger">
+                {{ form.phone.errors }}
+            </div>
+            {% endif %}
+            <input type="tel" name="phone" class="form-control" id="phone">
+        </div>
+
+        <div class="form-group">
+            <label for="company_name">Company Name:</label>
+            {% if form.company_name.errors %}
+            <div class="alert alert-danger">
+                {{ form.company_name.errors }}
+            </div>
+            {% endif %}
+            <input type="text" name="company_name" class="form-control" id="company_name">
+        </div>
+
+        <input type="hidden" name="user_type" value="{{ user_type }}">
+        
+        <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>
+    </form>
+    <p class="text-center mt-3">
+        Already have an account? <a href="{% url 'login' %}">Login here</a>
+    </p>
+</div>
+{% endblock %}

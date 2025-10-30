@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Available Cargo{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Available Cargo</h2>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Cargo Number</th>
+                        <th>Storage</th>
+                        <th>Arrival Date</th>
+                        <th>Pickup Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cargo in cargo_list %}
+                    <tr>
+                        <td>{{ cargo.cargo_number }}</td>
+                        <td>{{ cargo.storage }}</td>
+                        <td>{{ cargo.arrival_date }}</td>
+                        <td>{{ cargo.pickup_date }}</td>
+                        <td>
+                            <a href="{% url 'schedule_pickup' cargo.pk %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-calendar-alt"></i> Schedule Pickup
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No available cargo found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

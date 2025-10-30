@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}Driver Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="dashboard-header mb-4">
+        <h1>Driver Dashboard</h1>
+        <p>Welcome {{ user.username }} ({{ user.company_name }})</p>
+    </div>
+
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Assignments</h5>
+                    <p class="card-text">View your delivery assignments</p>
+                    <a href="#" class="btn btn-primary">View Assignments</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Delivery Status</h5>
+                    <p class="card-text">Update delivery status</p>
+                    <a href="#" class="btn btn-primary">Update Status</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">History</h5>
+                    <p class="card-text">View delivery history</p>
+                    <a href="#" class="btn btn-primary">View History</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Available Cargo for Pickup</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Cargo Number</th>
+                                    <th>Storage</th>
+                                    <th>Arrival Date</th>
+                                    <th>Pickup Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cargo in cargo_list %}
+                                <tr>
+                                    <td>{{ cargo.cargo_number }}</td>
+                                    <td>{{ cargo.storage }}</td>
+                                    <td>{{ cargo.arrival_date }}</td>
+                                    <td>{{ cargo.pickup_date }}</td>
+                                    <td>
+                                        <a href="{% url 'schedule_pickup' cargo.pk %}" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-calendar-alt"></i> Schedule Pickup
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No cargo available for pickup.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

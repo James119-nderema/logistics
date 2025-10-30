@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Book Container Slot</h2>
+
+    <!-- Depot Capacity Information -->
+    <div class="row mb-4">
+        {% for depot in depot_info %}
+        <div class="col-md-4 mb-3">
+            <div class="card {% if depot.available > 0 %}bg-light{% else %}bg-danger text-white{% endif %}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ depot.name }}</h5>
+                    <div class="row g-0">
+                        <div class="col">
+                            <p class="mb-1"><small>Total Capacity</small></p>
+                            <h6>{{ depot.total }}</h6>
+                        </div>
+                        <div class="col">
+                            <p class="mb-1"><small>Current Usage</small></p>
+                            <h6>{{ depot.current }}</h6>
+                        </div>
+                        <div class="col">
+                            <p class="mb-1"><small>Available</small></p>
+                            <h6>{{ depot.available }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="id_depot" class="form-label">Select Depot</label>
+                    {{ form.depot }}
+                    {% if form.depot.errors %}
+                        <div class="alert alert-danger mt-2">
+                            {{ form.depot.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_booking_time" class="form-label">Booking Time</label>
+                    {{ form.booking_time }}
+                    {% if form.booking_time.errors %}
+                        <div class="alert alert-danger mt-2">
+                            {{ form.booking_time.errors }}
+                        </div>
+                    {% endif %}
+                    <div class="form-text text-muted mt-2">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Maximum 3 bookings allowed per time slot
+                    </div>
+                </div>
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check me-2"></i>Book Slot
+                    </button>
+                    <a href="{% url 'container_booking_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
